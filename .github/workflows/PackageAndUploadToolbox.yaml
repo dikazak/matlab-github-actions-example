@@ -1,0 +1,39 @@
+name: Package Matlab Toolbox
+
+on:
+  workflow_dispatch:
+    inputs:
+      TOOLBOX_VERSION:
+        description: 'TOOLBOX_VERSION'
+        required: true
+        type: string
+
+jobs:
+  package-and-upload-matlab-agent-toolbox:
+    name: Package And Upload Matlab Toolbox
+    runs-on: macos-14
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up MATLAB
+        uses: matlab-actions/setup-matlab@v2
+        with:
+          release: R2024a
+
+      - name: Run PackageToolbox.m file
+        uses: matlab-actions/run-command@v2
+        env:
+          TOOLBOX_VERSION: ${{ inputs.TOOLBOX_VERSION }}
+        with:
+          command: PackageToolbox
+
+      - name: Upload toolbox to s3
+        uses: shallwefootball/s3-upload-action@master
+        with:
+          endpoint: ${{ secrets.AWS_ENDPOINT }}
+          aws_key_id: ${{ secrets.AWS_KEY_ID }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY}}
+          aws_bucket: ${{ secrets.AWS_BUCKET }}
+          source_dir: build
+          destination_dir: ${{ secrets.AWS_MATLAB_DIRECTORY }}
