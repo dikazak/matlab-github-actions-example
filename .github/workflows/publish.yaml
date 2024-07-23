@@ -1,4 +1,4 @@
-name: Upload agent toolbox to s3
+name: Publish agent toolbox to s3
 
 on:
   push:
@@ -7,9 +7,9 @@ on:
   workflow_dispatch:
 
 jobs:
-  upload-agent-toolbox-to-s3:
-    name: Upload agent toolbox to s3
-    runs-on: macos-14
+  publish-agent-toolbox-to-s3:
+    name: Publish agent toolbox to s3
+    runs-on: ubuntu-22.04
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -21,6 +21,6 @@ jobs:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
 
-      - name: Upload agent toolbox to S3
+      - name: Publish agent toolbox to S3
         run: |
-          aws s3 cp --recursive build s3://zebrunner.com-assets/_common/agent/matlab    
+          aws s3 cp --recursive build s3://zebrunner.com-assets/_common/agent/matlab
