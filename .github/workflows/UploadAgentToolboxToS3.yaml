@@ -11,12 +11,13 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@v4
 
-      - name: Upload agent toolbox to s3
-        uses: shallwefootball/s3-upload-action@master
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
         with:
-          endpoint: https://zebrunner.com-assets.s3.us-east-2.amazonaws.com
-          aws_key_id: ${{ secrets.AWS_ACCESS_KEY }}
-          aws_secret_access_key: ${{ secrets.AWS_SECRET_KEY}}
-          aws_bucket: zebrunner.com-assets
-          source_dir: build
-          destination_dir: _common/agent/matlab
+          aws-region: us-east-2
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_KEY }}
+
+      - name: Upload agent toolbox to S3
+        run: |
+          aws s3 cp --recursive build s3://zebrunner.com-assets/_common/agent/matlab    
