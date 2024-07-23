@@ -1,0 +1,22 @@
+name: Upload agent toolbox to s3
+
+on:
+  workflow_dispatch:
+
+jobs:
+  upload-agent-toolbox-to-s3:
+    name: Upload agent toolbox to s3
+    runs-on: macos-14
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Upload agent toolbox to s3
+        uses: shallwefootball/s3-upload-action@master
+        with:
+          endpoint: https://zebrunner.com-assets.s3.us-east-2.amazonaws.com
+          aws_key_id: ${{ secrets.AWS_ACCESS_KEY }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_KEY}}
+          aws_bucket: zebrunner.com-assets
+          source_dir: build
+          destination_dir: _common/agent/matlab
