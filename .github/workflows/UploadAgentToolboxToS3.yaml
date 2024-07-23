@@ -1,6 +1,9 @@
 name: Upload agent toolbox to s3
 
 on:
+  push:
+    branches:
+      - main
   workflow_dispatch:
 
 jobs:
